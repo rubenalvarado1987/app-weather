@@ -22,8 +22,12 @@ export class InfoComponent implements OnInit {
   setInfo(){
     this.weatherService.getInfo(this.ciudad).subscribe((res)=>{
       if(res.currently != undefined){
-      this.temperatura = res.currently.temperature;
-      this.hora = res.currently.time;
+      
+      var fahrenheit = parseFloat(res.currently.temperature);
+      this.temperatura = (fahrenheit-32) / 1.8;
+      
+      var date = new Date(res.currently.time * 1000);
+      this.hora = date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
     }
     else{
       this.setInfo();
