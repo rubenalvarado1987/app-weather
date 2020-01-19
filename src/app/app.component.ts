@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 
 export class AppComponent {
   title = 'app-weather';
-  ciudades: string[] = ['santiago','zurich','auckland','sidney','londres','georgia'];
+  // TODO obtener desde DB
+  ciudades: string[] = ['santiago', 'zurich', 'auckland', 'sidney', 'londres', 'georgia'];
 
 }

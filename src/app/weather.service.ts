@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpEvent,
-  HttpRequest,
-  HttpErrorResponse,
-} from "@angular/common/http";
-
+import { HttpClient } from "@angular/common/http";
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
+import { Socket } from 'ngx-socket-io';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +10,32 @@ import { Observable } from 'rxjs';
 
 export class WeatherService {
 
-  constructor(private http: HttpClient) { }
+  public socketStatus = false;
 
-  getInfo(ciudad: string): Observable<any>{
-    return this.http.get<any>(environment.apiUrl + "?query=" + ciudad);
+  constructor(private http: HttpClient, private socket: Socket) {
+    this.checkStatus();
+  }
+
+  checkStatus(){
+    this.socket.on('connect', () => {
+      console.log('Usuario conectado');
+      this.socketStatus = true;
+    });
+
+    this.socket.on('disconnect', () => {
+      console.log('Usuario desconectado');
+      this.socketStatus = false;
+    });
+  }
+
+  // evento, payload, callback Metodo generico reutilizable
+  emit(evento: string, payload?: any, callback?: Function){
+    this.socket.emit(evento, payload, callback);
+
+  }
+
+  listen(evento:string){
+    return this.socket.fromEvent(evento);
   }
 
 }
