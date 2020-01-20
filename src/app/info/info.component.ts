@@ -28,17 +28,21 @@ export class InfoComponent implements OnInit {
     // Se emite y se escucha por ciudad, generando el siguiente socket emisor y receptor
 
     this.weatherService.emit('getTime', {utc: this.ciudad});
-    console.log('pasogetTime');
 
     this.weatherService.listen('getTime').subscribe( res => {
 
       this.res = res;
+
+      // Al recibir un error el socket, vuelve hacer un emit de la ciudad para reconstruir la peteción
+      if (this.res.err === 'error provocated'){
+        this.weatherService.emit('getTime', {utc: this.ciudad});
+      }
+
+
       if (this.ciudad === this.res.ciudad) {
 
         const fahrenheit = parseFloat(this.res.data.currently.temperature);
         this.temperatura = (fahrenheit - 32) / 1.8;
-
-        console.log('data:', this.res.data);
 
         const date = new Date(this.res.data.currently.time * 1000);
         this.hora = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
