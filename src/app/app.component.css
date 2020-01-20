@@ -78,6 +78,9 @@
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 16px;
+    background-color: #bddef7;
+    padding: 10px;
+    border-radius: 10px;;
   }
 
   .card {
